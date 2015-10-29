@@ -1,8 +1,28 @@
 var app = angular.module('itunes');
 
+
+
 app.service('itunesService', function($http, $q){
+
+    this.getArtist = function(artist) { //when this function is called from the controller, it's going to expect an Artist parameter passed in 
+        
+        var myPromise = $q.defer();
+        $http({
+            method: "JSONP",
+            url: "https://itunes.apple.com/search?term=" + artist + "&callback=JSON_CALLBACK"
+//            url: "http://swapi.co/api/people/1/"
+        }).then(function(response){
+   
+            var parsedResponse = response.data.results  
+            console.log("this is the parsedResponse", parsedResponse);
+        })
+    
+        return myPromise.promise;
+        
+    }
   //This service is what will do the 'heavy lifting' and get our data from the iTunes API.
   //Also note that we're using a 'service' and not a 'factory' so all your methods you want to call in your controller need to be on 'this'.
+    
 
   //Write a method that accepts an artist's name as the parameter, then makes a 'JSONP' http request to a url that looks like this
   //https://itunes.apple.com/search?term=' + artist + '&callback=JSON_CALLBACK'
